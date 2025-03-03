@@ -33,7 +33,11 @@ uvicorn app.main:app --reload
 1. Создаем `.env` файл скопировав `.env_example`
 	VUE_APP_SERVER = '***SERVER_IP***:***SERVER_PORT***'
 
-2. Устанавливаем `NVM` и выбираем версию `node` ***ВСТАВИТЬ ВЕРСИЮ***
+2. Устанавливаем `NVM` и выбираем версию `node` 20.18.1
+https://github.com/coreybutler/nvm-windows
+``` shell
+nvm install 20.18.1
+```
 3. Инизиализируем проект 
 ``` shell
 npm i
