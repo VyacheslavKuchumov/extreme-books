@@ -1,4 +1,5 @@
 from pydantic import BaseModel, ConfigDict
+from app.schemas.books import BookOut
 
 # quiz create schema
 class QuizCreate(BaseModel):
@@ -15,6 +16,7 @@ class QuizOut(BaseModel):
     quiz_id: int
     points: int
     book_id: int
+    book: BookOut
 
     model_config = ConfigDict(from_attributes=True)
 

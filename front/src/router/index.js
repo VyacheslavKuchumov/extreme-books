@@ -5,7 +5,9 @@ import instance from "@/middlewares";
 import HomeView from "@/views/HomeView.vue";
 import Register from "@/views/Auth/Register.vue";
 import Login from "@/views/Auth/Login.vue";
-import AdminBooks from "@/views/Books/AdminBooksView.vue";
+import AdminBooks from "@/views/Admin/AdminBooksView.vue";
+import AdminQuizzes from "@/views/Admin/AdminQuizzesView.vue";
+import AdminEvents from "@/views/Admin/AdminEventsView.vue";
 
 
 
@@ -31,7 +33,20 @@ const routes = [
     name: "admin-books",
     component: AdminBooks,
     meta: { auth: true },
-  }
+  },
+  {
+    path: "/admin/quizzes",
+    name: "admin-quizzes",
+    component: AdminQuizzes,
+    meta: { auth: true },
+  },
+  {
+    path: "/admin/events",
+    name: "admin-events",
+    component: AdminEvents,
+    meta: { auth: true },
+  },
+
   
 ];
 
