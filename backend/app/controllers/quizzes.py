@@ -1,0 +1,49 @@
+from sqlalchemy.orm import Session
+from app.models.quizzes import Quiz
+from app.schemas.quizzes import QuizCreate, QuizUpdate
+
+# class for quizzes
+# class Quiz(Base):
+#     __tablename__ = "quizzes"
+
+#     quiz_id = Column(BigInteger, primary_key=True, index=True)
+#     points = Column(BigInteger, nullable=False)
+#     book_id = Column(BigInteger, ForeignKey("books.book_id"), nullable=False)
+    
+#     book = relationship("Book", back_populates="quizzes")
+
+
+# function for getting all quizzes
+def get_quizzes(db: Session):
+    return db.query(Quiz).all()
+
+
+# function for creating a new quiz
+def create_quiz(db: Session, quiz: QuizCreate):
+    db_quiz = Quiz(
+        points=quiz.points,
+        book_id=quiz.book_id
+    )
+    db.add(db_quiz)
+    db.commit()
+    db.refresh(db_quiz)
+    return db_quiz
+
+
+# function for updating an existing quiz by id
+def update_quiz(db: Session, quiz_id: int, quiz: QuizUpdate):
+    db_quiz = db.query(Quiz).filter(Quiz.quiz_id == quiz_id).first()
+    db_quiz.points = quiz.points
+    db_quiz.book_id = quiz.book_id
+    db.commit()
+    db.refresh(db_quiz)
+    return db_quiz
+
+
+# function for deleting an existing quiz by id
+def delete_quiz(db: Session, quiz_id: int):
+    quiz = db.query(Quiz).filter(Quiz.quiz_id == quiz_id).first()
+    db.delete(quiz)
+    db.commit()
+    return quiz
+
