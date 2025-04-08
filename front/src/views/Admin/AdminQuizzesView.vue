@@ -53,21 +53,19 @@
         <v-card-text>
           <v-form ref="quizForm" v-model="valid" @submit.prevent="saveQuiz">
             <v-text-field
+              v-model="quizForm.quiz_name"
+              label="Название"
+              clearable
+              :rules="[rules.required]"
+            ></v-text-field>
+            <v-text-field
               v-model="quizForm.points"
               label="Баллы"
               type="number"
               clearable
               :rules="[rules.required]"
             ></v-text-field>
-            <v-select
-              v-model="quizForm.book_id"
-              :items="books"
-              label="Книга"
-              item-text="title"
-              item-value="book_id"
-              clearable
-              :rules="[rules.required]"
-            ></v-select>
+            
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -96,6 +94,7 @@
   
   <script>
   import { mapActions } from "vuex";
+  import { useRoute } from "vue-router";
   
   export default {
     data() {
@@ -105,6 +104,7 @@
         quizToDelete: null,
         editingQuiz: null,
         quizForm: {
+          quiz_name: "",
           points: "",
           book_id: null,
         },
@@ -112,15 +112,15 @@
         rules: {
           required: (value) => !!value || "Это поле обязательно",
         },
-        books: []
+        
       };
     },
     computed: {
       headers() {
         return [
-            { title: "ID", key: "quiz_id" },
-            { title: "Опрос по книге", key: "book" },
-          { title: "Баллы", key: "points" },
+            { title: "Название", key: "quiz_name" },
+            { title: "Опрос по книге", key: "book.book_name" },
+            { title: "Баллы", key: "points" },
           
           { title: "", key: "edit", sortable: false },
           { title: "", key: "delete", sortable: false },
@@ -131,6 +131,7 @@
       quizzes() {
         return this.$store.state.quizzes.data;
       },
+      
       ...mapActions({
         getQuizzes: "quizzes/getQuizzes",
         createQuiz: "quizzes/createQuiz",
@@ -140,24 +141,27 @@
       }),
       async openCreateDialog() {
         this.editingQuiz = null;
-        this.quizForm = { points: "", book_id: null };
+        this.quizForm = { quiz_name: "", points: "", book_id: null };
         this.editDialog = true;
       },
       openEditDialog(quiz) {
         this.editingQuiz = quiz;
         this.quizForm = {
+          quiz_name: quiz.quiz_name,
           points: quiz.points,
-          book_id: quiz.book_id,
         };
         this.editDialog = true;
       },
       closeEditDialog() {
         this.editDialog = false;
-        this.quizForm = { points: "", book_id: null };
+        this.quizForm = { quiz_name: "", points: "" };
       },
       async saveQuiz() {
         const formData = { ...this.quizForm };
         if (this.editingQuiz) {
+          const route = useRoute();
+          const book_id = route.params.id;
+          formData.book_id = book_id;
           formData.id = this.editingQuiz.quiz_id;
           await this.updateQuiz(formData);
         } else {
@@ -181,14 +185,12 @@
           this.closeConfirmDialog();
         }
       },
-      async loadBooks() {
-        await this.getBooks();
-        this.books = this.$store.state.books.data;
-      }
+      
     },
     async created() {
-      await this.getQuizzes();
-      await this.loadBooks();
+      const route = useRoute();
+      const book_id = route.params.id;
+      await this.getQuizzes(book_id);
     },
   };
   </script>

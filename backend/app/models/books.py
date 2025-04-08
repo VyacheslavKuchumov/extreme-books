@@ -15,5 +15,5 @@ class Book(Base):
     quizzes = relationship(
         "Quiz",
         back_populates="book",
-        # cascade="all, delete-orphan"
+        cascade="all, delete"
     )

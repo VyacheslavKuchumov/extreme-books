@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.schemas.quizzes import QuizCreate, QuizUpdate, QuizOut
-from app.controllers.quizzes import create_quiz, get_quizzes, update_quiz, delete_quiz
+from app.controllers.quizzes import create_quiz, get_quizzes_for_book, update_quiz, delete_quiz
 
 from app.database import get_db
 
 router = APIRouter()
 
-# get all quizzes
-@router.get("/", response_model=list[QuizOut])
-def get_all_quizzes(db: Session = Depends(get_db)):
-    return get_quizzes(db)
+# get quizzes for book 
+@router.get("/{book_id}", response_model=list[QuizOut])
+def get_quizzes(book_id: int, db: Session = Depends(get_db)):
+    return get_quizzes_for_book(db, book_id)
 
 
 # create a new quiz

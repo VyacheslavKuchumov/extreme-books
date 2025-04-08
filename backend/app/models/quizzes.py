@@ -7,6 +7,7 @@ class Quiz(Base):
     __tablename__ = "quizzes"
 
     quiz_id = Column(BigInteger, primary_key=True, index=True)
+    quiz_name = Column(Text, nullable=False)
     points = Column(BigInteger, nullable=False)
     book_id = Column(BigInteger, ForeignKey("books.book_id"), nullable=False)
     

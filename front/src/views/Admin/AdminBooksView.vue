@@ -21,6 +21,12 @@
           <template v-slot:item.img_url="{ item }">
             <v-img :src="item.img_url" max-width="100" max-height="100" contain></v-img>
           </template>
+          
+          <template v-slot:item.quiz="{ item }">
+            <v-btn size="small" color="secondary" class="mr-2" @click="goToQuiz(item)">
+              <v-icon>mdi-chat-question</v-icon>
+            </v-btn>
+          </template>
           <template v-slot:item.edit="{ item }">
             <v-btn size="small" color="primary" class="mr-2" @click="openEditDialog(item)">
               <v-icon>mdi-pencil</v-icon>
@@ -99,6 +105,7 @@
           { title: "Название", key: "title" },
           { title: "Автор", key: "author" },
           { title: "Изображение", key: "img_url" },
+          { title: "", key: "quiz", sortable: false },
           { title: "", key: "edit", sortable: false },
           { title: "", key: "delete", sortable: false },
         ],
@@ -130,6 +137,9 @@
         updateBook: "books/updateBook",
         deleteBook: "books/deleteBook",
       }),
+      goToQuiz(book) {
+        this.$router.push(`/admin/quizzes/${book.book_id}`);
+      },
       openCreateDialog() {
         this.editingBook = null;
         this.bookForm = { title: "", author: "", img_url: "" };

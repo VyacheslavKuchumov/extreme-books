@@ -35,10 +35,11 @@ const routes = [
     meta: { auth: true },
   },
   {
-    path: "/admin/quizzes",
+    path: "/admin/quizzes/:id",
     name: "admin-quizzes",
     component: AdminQuizzes,
     meta: { auth: true },
+    props: true,
   },
   {
     path: "/admin/events",

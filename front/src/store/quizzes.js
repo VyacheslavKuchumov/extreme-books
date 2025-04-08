@@ -26,9 +26,9 @@ export default {
     
     // quizzes crud
     // get quizzes
-    async getQuizzes({ commit }) {
+    async getQuizzes({ commit }, book_id) {
         try {
-            const response = await instance.get("/api/quizzes");
+            const response = await instance.get(`/api/quizzes/${book_id}`);
             if (response) return commit("setData", response.data);
         }
         catch (error) {
@@ -41,8 +41,8 @@ export default {
     // book_id: number
     async createQuiz({}, input) {
         try {
-            const { points, book_id } = input;
-            const response = await instance.post("/api/quizzes", { points, book_id });
+            const { quizz_name, points, book_id } = input;
+            const response = await instance.post("/api/quizzes", { quizz_name, points, book_id });
             if (response.ok) return console.log("ok");
         }
         catch (error) {
@@ -55,8 +55,8 @@ export default {
     // book_id: number
     async updateQuiz({}, input) {
         try {
-            const { id, points, book_id } = input;
-            const response = await instance.put(`/api/quizzes/${id}`, { points, book_id });
+            const { id, quizz_name, points, book_id } = input;
+            const response = await instance.put(`/api/quizzes/${id}`, { quizz_name, points, book_id });
             if (response.ok) return console.log("ok");
         }
         catch (error) {
