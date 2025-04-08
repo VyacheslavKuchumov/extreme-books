@@ -12,8 +12,9 @@ class Book(Base):
     img_url = Column(Text, nullable=True)
     
     # One-to-many relationship: one book can have many quizzes.
-    quizzes = relationship(
+    quiz = relationship(
         "Quiz",
+        uselist=True,
         back_populates="book",
         cascade="all, delete"
     )

@@ -5,11 +5,14 @@ export default {
   name: "books",
   state: () => ({
     data: null,
-
+    one_book: null,
   }),
   mutations: {
     setData(state, data) {
       state.data = data;
+    },
+    setOneBook(state, data) {
+      state.one_book = data;
     },
 
   },
@@ -20,6 +23,17 @@ export default {
         try {
             const response = await instance.get("/api/books");
             if (response) return commit("setData", response.data);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    },
+    // get book by id
+    async getBookById({commit}, id) {
+        try {
+            const response = await instance.get(`/api/books/search/${id}`);
+            console.log(response);
+            if (response) return commit("setOneBook", response.data);
         }
         catch (error) {
             console.log(error);

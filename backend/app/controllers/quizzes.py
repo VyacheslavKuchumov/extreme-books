@@ -17,6 +17,9 @@ from app.schemas.quizzes import QuizCreate, QuizUpdate
 def get_quizzes_for_book(db: Session, book_id: int):
     return db.query(Quiz).filter(Quiz.book_id == book_id).all()
 
+# function for getting a quiz by id
+def get_quiz_by_id(db: Session, quiz_id: int):
+    return db.query(Quiz).filter(Quiz.quiz_id == quiz_id).first()
 
 # function for creating a new quiz
 def create_quiz(db: Session, quiz: QuizCreate):

@@ -1,7 +1,7 @@
 <template>
     <v-card max-width="800" class="elevation-0 mt-5 ml-auto mr-auto">
       <v-card-title class="text-wrap" align="center">
-        Список квизов по книге "{{ one_book().title }}" (админ)
+        Варианты ответов для вопроса "{{ one_question().question_text }}" (админ)
       </v-card-title>
     </v-card>
   
@@ -12,25 +12,21 @@
         <v-btn icon="mdi-plus" color="primary" @click="openCreateDialog"></v-btn>
       </v-toolbar>
   
-      <v-container v-if="quizzes() && quizzes().length">
+      <v-container v-if="answers() && answers().length">
         <v-data-table
           :headers="headers"
-          :items="quizzes()"
+          :items="answers()"
           :items-per-page="-1"
           hide-default-footer
         >
-          <template v-slot:item.points="{ item }">
-            <div>{{ item.points }}</div>
+          <template v-slot:item.answer_text="{ item }">
+            <div>{{ item.answer_text }}</div>
           </template>
-          <template v-slot:item.book="{ item }">
-            <div>
-              {{ item.book ? item.book.title : item.book_id }}
-            </div>
+          <template v-slot:item.is_correct="{ item }">
+            <div>{{ item.is_correct ? 'Да' : 'Нет' }}</div>
           </template>
-          <template v-slot:item.question="{ item }">
-            <v-btn size="small" color="secondary" class="mr-2" @click="goToQuestion(item)">
-              <v-icon>mdi-chat-question</v-icon>
-            </v-btn>
+          <template v-slot:item.question_id="{ item }">
+            <div>{{ item.question_id }}</div>
           </template>
           <template v-slot:item.edit="{ item }">
             <v-btn size="small" color="primary" class="mr-2" @click="openEditDialog(item)">
@@ -50,34 +46,30 @@
       </v-alert>
     </v-card>
   
-    <!-- Диалог создания/редактирования квиза -->
+    <!-- Диалог создания/редактирования ответа -->
     <v-dialog v-model="editDialog" max-width="450px">
       <v-card>
         <v-card-title class="text-h5">
-          {{ editingQuiz ? "Редактировать" : "Создать" }}
+          {{ editingAnswer ? "Редактировать" : "Создать" }}
         </v-card-title>
         <v-card-text>
-          <v-form ref="quizForm" v-model="valid" @submit.prevent="saveQuiz">
+          <v-form ref="answerForm" v-model="valid" @submit.prevent="saveAnswer">
             <v-text-field
-              v-model="quizForm.quiz_name"
-              label="Название"
+              v-model="answerForm.answer_text"
+              label="Ответ"
               clearable
               :rules="[rules.required]"
             ></v-text-field>
-            <v-text-field
-              v-model="quizForm.points"
-              label="Баллы"
-              type="number"
-              clearable
-              :rules="[rules.required]"
-            ></v-text-field>
-            
+            <v-checkbox
+              v-model="answerForm.is_correct"
+              label="Правильный"
+            ></v-checkbox>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="closeEditDialog">Отмена</v-btn>
-          <v-btn color="primary" :disabled="!valid" @click="saveQuiz">Сохранить</v-btn>
+          <v-btn color="primary" :disabled="!valid" @click="saveAnswer">Сохранить</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -87,7 +79,7 @@
       <v-card>
         <v-card-title class="text-h5">Подтвердите удаление</v-card-title>
         <v-card-text>
-          Вы уверены, что хотите удалить квиз с ID «{{ quizToDelete?.quiz_id }}»?
+          Вы уверены, что хотите удалить ответ с ID «{{ answerToDelete?.answer_id }}»?
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -107,103 +99,96 @@
       return {
         confirmDeleteDialog: false,
         editDialog: false,
-        quizToDelete: null,
-        editingQuiz: null,
-        quizForm: {
-          quiz_name: "",
-          points: "",
+        answerToDelete: null,
+        editingAnswer: null,
+        answerForm: {
+          answer_text: "",
+          is_correct: false,
         },
-        book_id: null,
+        question_id: null,
         valid: false,
         rules: {
           required: (value) => !!value || "Это поле обязательно",
         },
-        
       };
     },
     computed: {
       headers() {
         return [
-            { title: "Название квиза", key: "quiz_name" },
-            { title: "Баллы за прохождение", key: "points" },
-            { title: "", key: "question", sortable: false },
+          { title: "Ответ", key: "answer_text" },
+          { title: "Правильный", key: "is_correct" },
           { title: "", key: "edit", sortable: false },
           { title: "", key: "delete", sortable: false },
         ];
       },
     },
     methods: {
-      quizzes() {
-        return this.$store.state.quizzes.data;
+      answers() {
+        return this.$store.state.answers.data || [];
       },
-      one_book() {
-        return this.$store.state.books.one_book || {};
+      one_question() {
+        return this.$store.state.questions.one_question || {};
       },
       ...mapActions({
-        getQuizzes: "quizzes/getQuizzes",
-        createQuiz: "quizzes/createQuiz",
-        updateQuiz: "quizzes/updateQuiz",
-        deleteQuiz: "quizzes/deleteQuiz",
-        getBookById: "books/getBookById",
+        getAnswers: "answers/getAnswers",
+        createAnswer: "answers/createAnswer",
+        updateAnswer: "answers/updateAnswer",
+        deleteAnswer: "answers/deleteAnswer",
+
+        getQuestionById: "questions/getQuestionById",
       }),
       goBack() {
-        this.$router.go(-1)
-      },
-      goToQuestion(quiz) {
-        this.$router.push(`/admin/questions/${quiz.quiz_id}`);
+        this.$router.go(-1);
       },
       async openCreateDialog() {
-        this.editingQuiz = null;
-        this.quizForm = { quiz_name: "", points: ""};
+        this.editingAnswer = null;
+        this.answerForm = { answer_text: "", is_correct: false };
         this.editDialog = true;
       },
-      openEditDialog(quiz) {
-        this.editingQuiz = quiz;
-        this.quizForm = {
-          quiz_name: quiz.quiz_name,
-          points: quiz.points,
+      openEditDialog(answer) {
+        this.editingAnswer = answer;
+        this.answerForm = {
+          answer_text: answer.answer_text,
+          is_correct: answer.is_correct,
         };
         this.editDialog = true;
       },
       closeEditDialog() {
         this.editDialog = false;
-        this.quizForm = { quiz_name: "", points: "" };
+        this.answerForm = { answer_text: "", is_correct: false };
       },
-      async saveQuiz() {
-        const formData = { ...this.quizForm, book_id: this.book_id };
-        if (this.editingQuiz) {
-          
-          formData.id = this.editingQuiz.quiz_id;
-          await this.updateQuiz(formData);
+      async saveAnswer() {
+        const formData = { ...this.answerForm, question_id: this.question_id };
+        if (this.editingAnswer) {
+          formData.id = this.editingAnswer.answer_id;
+          await this.updateAnswer(formData);
         } else {
-          await this.createQuiz(formData);
+          await this.createAnswer(formData);
         }
-
-        await this.getQuizzes(this.book_id);
+        await this.getAnswers(this.question_id);
         this.closeEditDialog();
       },
-      confirmDelete(quiz) {
-        this.quizToDelete = quiz;
+      confirmDelete(answer) {
+        this.answerToDelete = answer;
         this.confirmDeleteDialog = true;
       },
       closeConfirmDialog() {
         this.confirmDeleteDialog = false;
-        this.quizToDelete = null;
+        this.answerToDelete = null;
       },
       async deleteConfirmed() {
-        if (this.quizToDelete) {
-          await this.deleteQuiz(this.quizToDelete.quiz_id);
-          await this.getQuizzes(this.book_id);
+        if (this.answerToDelete) {
+          await this.deleteAnswer(this.answerToDelete.answer_id);
+          await this.getAnswers(this.question_id);
           this.closeConfirmDialog();
         }
       },
-      
     },
     async created() {
       const route = useRoute();
-      this.book_id = route.params.id;
-      await this.getQuizzes(this.book_id);
-      await this.getBookById(this.book_id);
+      this.question_id = route.params.id;
+      await this.getAnswers(this.question_id);
+      await this.getQuestionById(this.question_id);
     },
   };
   </script>

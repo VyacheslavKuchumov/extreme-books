@@ -8,7 +8,8 @@ import Login from "@/views/Auth/Login.vue";
 import AdminBooks from "@/views/Admin/AdminBooksView.vue";
 import AdminQuizzes from "@/views/Admin/AdminQuizzesView.vue";
 import AdminEvents from "@/views/Admin/AdminEventsView.vue";
-
+import AdminQuestions from "@/views/Admin/AdminQuestionsView.vue";
+import AdminAnswers from "@/views/Admin/AdminAnswersView.vue";
 
 
 const routes = [
@@ -38,6 +39,20 @@ const routes = [
     path: "/admin/quizzes/:id",
     name: "admin-quizzes",
     component: AdminQuizzes,
+    meta: { auth: true },
+    props: true,
+  },
+  {
+    path: "/admin/questions/:id",
+    name: "admin-questions",
+    component: AdminQuestions,
+    meta: { auth: true },
+    props: true,
+  },
+  {
+    path: "/admin/answers/:id",
+    name: "admin-answers",
+    component: AdminAnswers,
     meta: { auth: true },
     props: true,
   },

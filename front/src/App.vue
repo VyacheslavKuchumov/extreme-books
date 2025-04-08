@@ -27,10 +27,6 @@
           <v-list-item v-if="isAuth" to="/admin/events">
             <v-list-item-title>Мероприятия (админ)</v-list-item-title>
           </v-list-item>
-
-          <v-list-item v-if="isAuth" to="/admin/quizzes">
-            <v-list-item-title>Квизы (админ)</v-list-item-title>
-          </v-list-item>
          
          
           <v-list-item v-if="isAuth" @click="logout()">

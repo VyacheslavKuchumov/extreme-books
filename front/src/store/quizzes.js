@@ -5,11 +5,14 @@ export default {
   name: "quizzes",
   state: () => ({
     data: null,
-
+    one_quiz: null,
   }),
   mutations: {
     setData(state, data) {
       state.data = data;
+    },
+    setOneQuiz(state, data) {
+      state.one_quiz = data;
     },
 
   },
@@ -35,14 +38,25 @@ export default {
             console.log(error);
         }
     },
+    // get quiz by id
+    async getQuizById({ commit }, id) {
+        try {
+            const response = await instance.get(`/api/quizzes/search/${id}`);
+            if (response) return commit("setOneQuiz", response.data);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    },
 
     // create quiz
     // points: number
     // book_id: number
     async createQuiz({}, input) {
         try {
-            const { quizz_name, points, book_id } = input;
-            const response = await instance.post("/api/quizzes", { quizz_name, points, book_id });
+            const { quiz_name, points, book_id } = input;
+            console.log(input);
+            const response = await instance.post("/api/quizzes", { quiz_name, points, book_id });
             if (response.ok) return console.log("ok");
         }
         catch (error) {
@@ -55,8 +69,8 @@ export default {
     // book_id: number
     async updateQuiz({}, input) {
         try {
-            const { id, quizz_name, points, book_id } = input;
-            const response = await instance.put(`/api/quizzes/${id}`, { quizz_name, points, book_id });
+            const { id, quiz_name, points, book_id } = input;
+            const response = await instance.put(`/api/quizzes/${id}`, { quiz_name, points, book_id });
             if (response.ok) return console.log("ok");
         }
         catch (error) {
