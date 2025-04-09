@@ -102,6 +102,9 @@
             this.correctCount += 1;
           }
         });
+
+        this.score = Math.round(this.score * 10) / 10;
+
         
         // Показываем диалоговое окно с результатами
         this.dialogResult = true;
