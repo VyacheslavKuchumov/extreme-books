@@ -19,9 +19,17 @@
           <v-list-item v-if="isAuth" to="/">
             <v-list-item-title>Главная</v-list-item-title>
           </v-list-item>
+
+          <v-list-item v-if="isAuth" to="/events">
+            <v-list-item-title>Мероприятия</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item v-if="isAuth" to="/books">
+            <v-list-item-title>Книги</v-list-item-title>
+          </v-list-item>
           
           <v-list-item v-if="isAuth" to="/admin/books">
-            <v-list-item-title>Книги (админ)</v-list-item-title>
+            <v-list-item-title>Книги и квизы (админ)</v-list-item-title>
           </v-list-item>
 
           <v-list-item v-if="isAuth" to="/admin/events">

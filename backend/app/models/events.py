@@ -8,7 +8,7 @@ class Event(Base):
 
     event_id = Column(BigInteger, primary_key=True, index=True)
     title = Column(Text, nullable=False)
-    description = Column(Text, nullable=False)
+    description = Column(Text, nullable=True)
     start_date = Column(Date, nullable=False)
     img_url = Column(Text, nullable=True)
 

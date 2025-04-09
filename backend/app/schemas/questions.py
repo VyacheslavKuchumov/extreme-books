@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
-# from app.schemas.books import BookOut
+from app.schemas.answers import AnswerOut
+from typing import Optional
 
 
 
@@ -18,6 +19,8 @@ class QuestionOut(BaseModel):
     question_id: int
     question_text: str
     quiz_id: int
+    
+    answer: Optional[list[AnswerOut]] = None
 
     model_config = ConfigDict(from_attributes=True)
 

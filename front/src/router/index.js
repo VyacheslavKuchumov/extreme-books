@@ -10,6 +10,9 @@ import AdminQuizzes from "@/views/Admin/AdminQuizzesView.vue";
 import AdminEvents from "@/views/Admin/AdminEventsView.vue";
 import AdminQuestions from "@/views/Admin/AdminQuestionsView.vue";
 import AdminAnswers from "@/views/Admin/AdminAnswersView.vue";
+import UserEvents from "@/views/User/UserEventsView.vue";
+import UserBooks from "@/views/User/UserBooksView.vue";
+import UserQuiz from "@/views/User/UserQuizView.vue";
 
 
 const routes = [
@@ -61,6 +64,25 @@ const routes = [
     name: "admin-events",
     component: AdminEvents,
     meta: { auth: true },
+  },
+  {
+    path: "/events",
+    name: "events",
+    component: UserEvents,
+    meta: { auth: true },
+  },
+  {
+    path: "/books",
+    name: "books",
+    component: UserBooks,
+    meta: { auth: true },
+  },
+  {
+    path: "/quiz/:id",
+    name: "quiz",
+    component: UserQuiz,
+    meta: { auth: true },
+    props: true,
   },
 
   

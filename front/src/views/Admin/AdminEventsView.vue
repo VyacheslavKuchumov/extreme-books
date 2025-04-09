@@ -61,7 +61,7 @@
               v-model="eventForm.description"
               label="Описание"
               clearable
-              :rules="[rules.required]"
+              
             ></v-text-field>
   
             <v-text-field
@@ -132,6 +132,7 @@
         eventForm: {
           title: "",
           start_date: "",
+          description: "",
           img_url: "",
         },
         valid: false,
@@ -194,7 +195,7 @@
       },
       openCreateDialog() {
         this.editingEvent = null;
-        this.eventForm = { title: "", start_date: "", img_url: "" };
+        this.eventForm = { title: "", start_date: "", img_url: "", description: "" };
         this.editDialog = true;
       },
       openEditDialog(event) {
@@ -209,7 +210,7 @@
       },
       closeEditDialog() {
         this.editDialog = false;
-        this.eventForm = { title: "", date: "", img_url: "" };
+        this.eventForm = { title: "", date: "", img_url: "", description: "" };
       },
       async saveEvent() {
         const formData = { ...this.eventForm };

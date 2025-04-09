@@ -1,18 +1,18 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import date
-
+from typing import Optional
 
 # event create schema
 class EventCreate(BaseModel):
     title: str
-    description: str
+    description: Optional[str]
     start_date: date
     img_url: str
     
 # event update schema
 class EventUpdate(BaseModel):
     title: str
-    description: str
+    description: Optional[str]
     start_date: date
     img_url: str
 
