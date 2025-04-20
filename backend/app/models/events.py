@@ -12,6 +12,11 @@ class Event(Base):
     start_date = Column(Date, nullable=False)
     img_url = Column(Text, nullable=True)
 
-
+    user_event = relationship(
+        "UserEvent",
+        uselist=True,
+        back_populates="event",
+        cascade="all, delete"
+    )
 
 

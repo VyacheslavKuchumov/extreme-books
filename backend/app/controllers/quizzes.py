@@ -2,15 +2,6 @@ from sqlalchemy.orm import Session
 from app.models.quizzes import Quiz
 from app.schemas.quizzes import QuizCreate, QuizUpdate
 
-# class for quizzes
-# class Quiz(Base):
-#     __tablename__ = "quizzes"
-
-#     quiz_id = Column(BigInteger, primary_key=True, index=True)
-#     points = Column(BigInteger, nullable=False)
-#     book_id = Column(BigInteger, ForeignKey("books.book_id"), nullable=False)
-    
-#     book = relationship("Book", back_populates="quizzes")
 
 
 # function for getting all quizzes

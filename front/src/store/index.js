@@ -6,6 +6,8 @@ import quizzes from "@/store/quizzes";
 import events from "@/store/events";
 import questions from "@/store/questions";
 import answers from "@/store/answers";
+import user_event from "@/store/user_event";
+import user_quiz from "@/store/user_quiz";
 
 
 
@@ -22,5 +24,7 @@ export default createStore({
     events: events,
     questions: questions,
     answers: answers,
+    user_event: user_event,
+    user_quiz: user_quiz,
   },
 });

@@ -55,7 +55,7 @@
               </v-card-text>
               <!-- Action Button -->
               <v-card-actions class="justify-center">
-                <v-btn color="primary" @click="register()">
+                <v-btn color="primary" @click="register(item)">
                   Записаться
                 </v-btn>
               </v-card-actions>
@@ -72,7 +72,8 @@
   </template>
   
   <script>
-  import { mapActions } from "vuex";
+  import user from "@/store/user";
+import { mapActions } from "vuex";
   
   export default {
     data() {
@@ -85,10 +86,14 @@
       events() {
         return this.$store.state.events.data;
       },
+      user() {
+        return this.$store.state.user.user;
+      },
     },
     methods: {
       ...mapActions({
         getEvents: "events/getEvents",
+        createUserEvent: "user_event/createUserEvent",
       }),
       
       isoToRussianDate(isoDate) {
@@ -102,15 +107,19 @@
         return `${day}.${month}.${year}`;
       },
       
-      register() {
-        // Здесь можно добавить логику для регистрации на мероприятие.
-        // Пока что просто отображаем диалог успешной регистрации.
+      async register(item) {
+        await this.createUserEvent({
+          event_id: item.event_id,
+          user_uid: localStorage.getItem("uid"),
+        });
         this.dialog = true;
       },
     },
     async created() {
       this.overlay = true;
       await this.getEvents();
+      
+
       this.overlay = false;
     },
   };

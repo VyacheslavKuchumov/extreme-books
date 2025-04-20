@@ -15,6 +15,11 @@ class Quiz(Base):
     book = relationship("Book", back_populates="quiz")
     question = relationship("Question", uselist=True, back_populates="quiz", cascade="all, delete")
 
-
+    user_quiz = relationship(
+        "UserQuiz",
+        uselist=True,
+        back_populates="quiz",
+        cascade="all, delete"
+    )
 
 

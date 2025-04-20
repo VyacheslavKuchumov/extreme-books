@@ -20,3 +20,5 @@ class User(Base):
 
     # Establishes the association to the Auth model
     auth = relationship("Auth", back_populates="user", uselist=False)
+    user_quiz = relationship("UserQuiz", back_populates="user", cascade="all, delete")
+    user_event = relationship("UserEvent", back_populates="user", cascade="all, delete")

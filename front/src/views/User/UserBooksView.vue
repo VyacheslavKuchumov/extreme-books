@@ -131,8 +131,7 @@
         this.showDialog = true;
       },
       // Метод перехода на страницу прохождения квиза
-      goToQuiz(item) {
-        // Замените "QuizPage" на фактическое имя маршрута
+      goToQuiz(item) {    
         console.log(item);
         this.$router.push(`/quiz/${item.quiz_id}`);
         this.showDialog = false;

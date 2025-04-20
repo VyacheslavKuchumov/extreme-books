@@ -39,3 +39,4 @@ def delete_answer(db: Session, answer_id: int):
     db.delete(answer)
     db.commit()
     return answer
+

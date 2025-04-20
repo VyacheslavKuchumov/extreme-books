@@ -77,6 +77,7 @@
     methods: {
       ...mapActions({
         getQuizById: "quizzes/getQuizById",
+        createUserQuiz: "user_quiz/createUserQuiz",
       }),
       quiz() {
         // Получаем данные квиза из Vuex
@@ -105,7 +106,11 @@
 
         this.score = Math.round(this.score * 10) / 10;
 
-        
+        this.createUserQuiz({
+          quiz_id: this.quiz().quiz_id,
+          user_uid: localStorage.getItem("uid"),
+          final_score: this.score,
+        })
         // Показываем диалоговое окно с результатами
         this.dialogResult = true;
       }
